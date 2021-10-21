@@ -74,10 +74,10 @@ def fileBrowser():
             elif combi.get() == "Graph 6":
                 appFunctions.facilitiesPieChart()
 
-        combi = ttk.Combobox(contentFrame, value=dataType, font=(20), width=80)  # using tkinter's combobox as the drop down lsit
+        combi = ttk.Combobox(contentFrame, value=dataType, font=("Microsoft Sans Serif",20), width=80)  # using tkinter's combobox as the drop down lsit
         combi.current(0)  # displays the default selected option
         combi.bind("<<ComboboxSelected>>", displayGraphNameAccordingToDataType)  # bind any event to a selection
-        dropdownListLabel = Label(contentFrame, text="Choose your data type for the graph to be generated:", font=(30))
+        dropdownListLabel = Label(contentFrame, text="Choose your data type for the graph to be generated:", font=("Microsoft Sans Serif",24))
 
         # packing area (Used to pack any functions from tkinter into the screen)
         dropdownListLabel.pack(pady=50)
@@ -103,10 +103,10 @@ def fileBrowser():
 
         tableFunctions.getFrame(
             contentFrame)  # passes information on the selected frame to display the table through parameters
-        infoTable = Label(contentFrame, text="Click on one of the buttons below to view data of 'Local' or 'Imported' cases.", font=(30))
+        infoTable = Label(contentFrame, text="Click on one of the buttons below to view data of 'Local' or 'Imported' cases.", font=("Microsoft Sans Serif",30))
         localbtn = Button(contentFrame, text="Display Local Cases Table", font=(200), width=100, bg="white",
                              command=hideLocal)  # clicking one button to display local/imported data will hide buttons and display table, vice versa
-        importedbtn = Button(contentFrame, text="Display Imported Cases Table", command=hideImported, font=(200), width=100, bg="white")
+        importedbtn = Button(contentFrame, text="Display Imported Cases Table", command=hideImported, font=("Microsoft Sans Serif",200), width=100, bg="white")
 
         # function packing area
         infoTable.pack(fill=BOTH, pady=50)
@@ -124,7 +124,7 @@ def fileBrowser():
         topFrame = Frame(contentFrame, height=100, width=100,
                          relief=SUNKEN)  # top frame used to seperate between frame that is used to search and frame that displays data
         Label(topFrame,
-              text="Search and display specific data by selecting the columns and conditions below: ", font=(30)).grid(row=0, pady=10)
+              text="Search and display specific data by selecting the columns and conditions below: ", font=("Microsoft Sans Serif",30)).grid(row=0, pady=10)
 
         colChoice = [  # Drop down options
             "Case ID",
@@ -142,9 +142,9 @@ def fileBrowser():
         clicked = StringVar()  # used to store the value of the dropdown list
         clicked.set(colChoice[0])  # current default value
         columnChoose = OptionMenu(topFrame, clicked, *colChoice)  # specifies the dropdown list options
-        Label(topFrame, text="Column (example: CaseID): ", font=10).grid()
+        Label(topFrame, text="Column (example: CaseID): ", font=("Microsoft Sans Serif",10)).grid()
         columnChoose.grid()  # places the dropdown list in the gui using grid method
-        Label(topFrame, text="Value (example: case-1): ", font=10).grid()
+        Label(topFrame, text="Value (example: case-1): ", font=("Microsoft Sans Serif",10)).grid()
 
         v = StringVar()  # initialise variable to store user input
         Entry(topFrame, textvariable=v).grid(padx=10)  # user input box
@@ -328,15 +328,15 @@ def fileBrowser():
             widget.destroy()
 
         mainMenuFrame.pack(fill=BOTH, expand=1)  # create a new frame specifically for the main menu page
-        Label(mainMenuFrame, text="MAIN MENU", font=("fixedsys", 44), bg="Orange", fg="White").pack(
+        Label(mainMenuFrame, text="MAIN MENU", font=("Microsoft Yahei UI", 44, "bold"), bg="Orange", fg="White").pack(
             anchor=N, expand=1)
-        Label(mainMenuFrame, text="Covid-19 Data Crawler", font=("fixedsys", 25), bg="Orange", fg="Blue").pack(
+        Label(mainMenuFrame, text="Covid-19 Data Crawler", font=("Microsoft Yahei UI", 25), bg="Orange", fg="Blue").pack(
             anchor=N, expand=1)
-        startUse = Button(mainMenuFrame, text="Start Application", font=("fixedsys", 15), padx=44, pady=10,
+        startUse = Button(mainMenuFrame, text="Start Application", font=("Microsoft Yahei UI", 15), padx=44, pady=10,
                           command=startFromMenu)  # create start application button
-        reUpload = Button(mainMenuFrame, text="Upload A New Data-set", font=("fixedsys", 15), padx=24, pady=10,
+        reUpload = Button(mainMenuFrame, text="Upload A New Dataset", font=("Microsoft Yahei UI", 15), padx=24, pady=10,
                           command=fileBrowserFromMenu)  # create reupload button
-        exitFromMenu = Button(mainMenuFrame, text="QUIT", padx=30, font=("fixedsys", 15), pady=10,
+        exitFromMenu = Button(mainMenuFrame, text="QUIT", padx=30, font=("Microsoft Yahei UI", 15), pady=10,
                               command=exitWindow)  # create exit button
 
         # button packing area
