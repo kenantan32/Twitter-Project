@@ -1,13 +1,15 @@
 from tkinter import *
 from tkinter import ttk
-from tkinter import filedialog
 import frame
 #import appFunctions
 import tableFunctions
 import emailFunctions
 import searchFunctions
-
+import http.server
+from tkinter import filedialog, Tk, messagebox, Button, Label, PhotoImage, Listbox, StringVar, Toplevel
 # imported modules used for GUI to function
+
+
 
 
 def fileBrowser():
@@ -28,17 +30,22 @@ def fileBrowser():
     MainPageLabel1.destroy()  # From this point on, the gui is remodelling itself by destroying past created labels and buttons
     MainPageLabel2.destroy()
     browseButton.destroy()
-
-    # stores the file path of the user selected data-set to be used with our other functions
-    file_path = filedialog.askopenfilename(initialdir="",
+    try:
+        # stores the file path of the user selected data-set to be used with our other functions
+        tempdir = filedialog.askopenfilename(initialdir="",
                                            title="Select Dataset File",
                                            filetypes=((".csv Files", "*.csv"), ("All Files", "*.*")))
-
     # sending file path to var so other functions can use the file path
-    frame.convertToDF(file_path)  # parse file path
-
+          # parse file path
+        if tempdir[-3:].lower() not in ['csv', 'prn', 'xls', 'ods'] and tempdir[-4:].lower() not in ['xlsx', 'xltx', 'xlsm',
+                                                                                                 'xlsb']:
+            messagebox.showerror("Warning", "Choose a CSV file!")  # Error messagebox
+        else:
+            frame.convertToDF(tempdir)
+    except:
+        messagebox.showerror("Warning", "Error!")
     # Window that updates after selecting CSV file
-    console.geometry("1000x650")
+    gui.geometry("1000x650")
 
     def graphData():
         """Upon Navigating to the 'Generate Graph' Button, this function will run"""
@@ -297,7 +304,7 @@ def fileBrowser():
 
     def exitWindow():
         """This function forces the app to exit/quit"""
-        console.quit()
+        gui.quit()
 
     def startFromMenu():
         """This function re-does the gui navigation bar and frames after navigating from the menu page"""
@@ -336,7 +343,7 @@ def fileBrowser():
         mainMenuFrame.pack(fill=BOTH, expand=1)  # create a new frame specifically for the main menu page
         Label(mainMenuFrame, text="MAIN MENU", font=("fixedsys", 44), bg="Orange", fg="White").pack(
             anchor=N, expand=1)
-        Label(mainMenuFrame, text="ICT1002 Project: Group 22", font=("fixedsys", 25), bg="Orange", fg="Blue").pack(
+        Label(mainMenuFrame, text="Covid-19 Data Crawler", font=("fixedsys", 25), bg="Orange", fg="Blue").pack(
             anchor=N, expand=1)
         startUse = Button(mainMenuFrame, text="Start Application", font=("fixedsys", 15), padx=44, pady=10,
                           command=startFromMenu)  # create start application button
@@ -353,9 +360,9 @@ def fileBrowser():
         return
 
     # default Frames Creation
-    mainMenuFrame = Frame(console, relief=SUNKEN, height=800, width=1000, background='Orange')
-    buttonFrame = Frame(console, height=100, width=1000, borderwidth=10, relief=GROOVE, background='Orange')
-    mainframe = Frame(console, height=550, width=1000, borderwidth=10, relief=SUNKEN, background='Orange')
+    mainMenuFrame = Frame(gui, relief=SUNKEN, height=800, width=1000, background='Orange')
+    buttonFrame = Frame(gui, height=100, width=1000, borderwidth=10, relief=GROOVE, background='Orange')
+    mainframe = Frame(gui, height=550, width=1000, borderwidth=10, relief=SUNKEN, background='Orange')
     contentFrame = Frame(mainframe, height=600, width=1000, borderwidth=10)
 
     # Main Buttons creation section
@@ -380,21 +387,22 @@ def fileBrowser():
 
 
 # initialise starting GUI Window
-console = Tk()
-console.iconbitmap('icons/SIT_logo_2.ico')
-console.title("1002 Python Project")
-console.geometry("300x200")
+gui = Tk()
+gui.iconbitmap('icons/SIT_logo_2.ico')
+gui.title("Covid-19 Data Crawler")
+gui.geometry("300x200")
+gui.attributes('-topmost', True)
 
 # Create Label to instruct users to browse for data
-MainPageLabel1 = Label(console, text="Welcome to our program!")
-MainPageLabel2 = Label(console, text="Click on the button above to browse for a Dataset!")
+MainPageLabel1 = Label(gui, text="Welcome to our program!")
+MainPageLabel2 = Label(gui, text="Click on the button above to browse for a Dataset!")
 # Button to browse for Dataset
-browseButton = Button(console, text="Browse", padx=30, pady=10, command=fileBrowser)
+browseButton = Button(gui, text="Browse", padx=30, pady=10, command=fileBrowser)
 
 # PACK SECTION
 MainPageLabel1.pack(ipadx=20, ipady=20)
 browseButton.pack()
 MainPageLabel2.pack(ipadx=20, ipady=20)
 
-console.mainloop()
+gui.mainloop()
 
