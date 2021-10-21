@@ -317,7 +317,7 @@ def fileBrowser():
 
     def fileBrowserFromMenu():  # will run if user selects the option to reupload dataset from the menu page
         """This function runs if user selects the option to reupload dataset from the menu page"""
-        fileBrowser()  # prompts user to select file again
+        abc()  # prompts user to select file again
         mainMenuFrame.pack_forget()  # removes the mainmenuframe
 
     def mainMenu():
