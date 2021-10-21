@@ -1,7 +1,7 @@
 from tkinter import *
 from tkinter import ttk
-import frame
-"""import appFunctions
+"""import frame
+import appFunctions
 import tableFunctions
 import emailFunctions
 import searchFunctions"""
@@ -42,7 +42,7 @@ def fileBrowser():
         mainframe.pack(fill=BOTH, expand=1)
         contentFrame.pack(fill=BOTH, expand=1)
         dataType = [  # dropdown list options
-            "Graph 1",
+            "Top 10 words for each emotion",
             "Graph 2",
             "Graph 3",
             "Graph 4",
@@ -56,7 +56,7 @@ def fileBrowser():
 
         def displayGraphNameAccordingToDataType(event):
             """This function listens to the 'event' and displays the graph based on the datatype selected using the combobox"""
-            if combi.get() == "Graph 1":
+            if combi.get() == "Top 10 words for each emotion":
                 appFunctions.ageBarGraph()
 
             elif combi.get() == "Graph 2":
@@ -385,7 +385,7 @@ def abc():
                                                                                                  'xlsb']:
             messagebox.showerror("Warning", "Choose a CSV file!")  # Error messagebox
         else:
-            frame.convertToDF(tempdir)
+            """frame.convertToDF(tempdir)"""
             fileBrowser()
     except:
         messagebox.showerror("Warning", "Error!")
