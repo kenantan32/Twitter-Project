@@ -1,10 +1,10 @@
 from tkinter import *
 from tkinter import ttk
 import frame
-#import appFunctions
+"""import appFunctions
 import tableFunctions
 import emailFunctions
-import searchFunctions
+import searchFunctions"""
 import http.server
 from tkinter import filedialog, Tk, messagebox, Button, Label, PhotoImage, Listbox, StringVar, Toplevel
 # imported modules used for GUI to function
@@ -30,20 +30,7 @@ def fileBrowser():
     MainPageLabel1.destroy()  # From this point on, the gui is remodelling itself by destroying past created labels and buttons
     MainPageLabel2.destroy()
     browseButton.destroy()
-    try:
-        # stores the file path of the user selected data-set to be used with our other functions
-        tempdir = filedialog.askopenfilename(initialdir="",
-                                           title="Select Dataset File",
-                                           filetypes=((".csv Files", "*.csv"), ("All Files", "*.*")))
-    # sending file path to var so other functions can use the file path
-          # parse file path
-        if tempdir[-3:].lower() not in ['csv', 'prn', 'xls', 'ods'] and tempdir[-4:].lower() not in ['xlsx', 'xltx', 'xlsm',
-                                                                                                 'xlsb']:
-            messagebox.showerror("Warning", "Choose a CSV file!")  # Error messagebox
-        else:
-            frame.convertToDF(tempdir)
-    except:
-        messagebox.showerror("Warning", "Error!")
+
     # Window that updates after selecting CSV file
     gui.geometry("1000x650")
 
@@ -386,6 +373,23 @@ def fileBrowser():
     Label(contentFrame, text="Start by navigating to one of our functions", font=("fixedsys", 20), fg='white', bg='black').pack(padx=50)  # Welcome page
 
 
+def abc():
+    try:
+        # stores the file path of the user selected data-set to be used with our other functions
+        tempdir = filedialog.askopenfilename(initialdir="",
+                                           title="Select Dataset File",
+                                           filetypes=((".csv Files", "*.csv"), ("All Files", "*.*")))
+    # sending file path to var so other functions can use the file path
+          # parse file path
+        if tempdir[-3:].lower() not in ['csv', 'prn', 'xls', 'ods'] and tempdir[-4:].lower() not in ['xlsx', 'xltx', 'xlsm',
+                                                                                                 'xlsb']:
+            messagebox.showerror("Warning", "Choose a CSV file!")  # Error messagebox
+        else:
+            frame.convertToDF(tempdir)
+            fileBrowser()
+    except:
+        messagebox.showerror("Warning", "Error!")
+
 # initialise starting GUI Window
 gui = Tk()
 gui.iconbitmap('icons/SIT_logo_2.ico')
@@ -397,7 +401,7 @@ gui.attributes('-topmost', True)
 MainPageLabel1 = Label(gui, text="Welcome to our program!")
 MainPageLabel2 = Label(gui, text="Click on the button above to browse for a Dataset!")
 # Button to browse for Dataset
-browseButton = Button(gui, text="Browse", padx=30, pady=10, command=fileBrowser)
+browseButton = Button(gui, text="Browse", padx=30, pady=10, command=abc)
 
 # PACK SECTION
 MainPageLabel1.pack(ipadx=20, ipady=20)
