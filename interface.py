@@ -47,7 +47,7 @@ def fileBrowser():
     # Window that updates after selecting CSV file
     gui.geometry("1000x650")
 
-    def graphData():
+    def graphdata():
         """Upon Navigating to the 'Generate Graph' Button, this function will run"""
         hideFrames()
         # To disable button from being able to be pressed again.
@@ -55,46 +55,46 @@ def fileBrowser():
         mainframe.pack(fill=BOTH, expand=1)
         contentFrame.pack(fill=BOTH, expand=1)
         dataType = [  # dropdown list options
-            "Bar Graph projecting Age of COVID-19 patients in Singapore",
-            "Bar Graph projecting Confirmed COVID-19 patients in Singapore over 13 weeks",
-            "Line Graph projecting the Nationality of COVID-19 patients in Singapore",
-            "Line Graph projecting the Transmission Type of COVID-19 patients in Singapore",
-            "Map Plots projecting No. Of COVID-19 Patients using facilities in Singapore",
-            "Pie Chart projecting Facilities used by Patients of COVID-19 in Singapore",
+            "Graph 1",
+            "Graph 2",
+            "Graph 3",
+            "Graph 4",
+            "Graph 5",
+            "Graph 6",
 
         ]
 
         clicked = StringVar()
         clicked.set(dataType[0])
 
-        def selectedDataType(event):
+        def displayGraphNameAccordingToDataType(event):
             """This function listens to the 'event' and displays the graph based on the datatype selected using the combobox"""
-            if combo.get() == "Bar Graph projecting Age of COVID-19 patients in Singapore":
+            if combi.get() == "Graph 1":
                 appFunctions.ageBarGraph()
 
-            elif combo.get() == "Bar Graph projecting Confirmed COVID-19 patients in Singapore over 13 weeks":
+            elif combi.get() == "Graph 2":
                 appFunctions.cfmCaseWeekBarChart()
 
-            elif combo.get() == "Line Graph projecting the Nationality of COVID-19 patients in Singapore":
+            elif combi.get() == "Graph 3":
                 appFunctions.natDaysLineGraph()
 
-            elif combo.get() == "Line Graph projecting the Transmission Type of COVID-19 patients in Singapore":
+            elif combi.get() == "Graph 4":
                 appFunctions.srcLineGraph()
 
-            elif combo.get() == "Map Plots projecting No. Of COVID-19 Patients using facilities in Singapore":
+            elif combi.get() == "Graph 5":
                 appFunctions.facilitiesGeogMap()
 
-            elif combo.get() == "Pie Chart projecting Facilities used by Patients of COVID-19 in Singapore":
+            elif combi.get() == "Graph 6":
                 appFunctions.facilitiesPieChart()
 
-        combo = ttk.Combobox(contentFrame, value=dataType, font=(20), width=80)  # using tkinter's combobox as the drop down lsit
-        combo.current(0)  # displays the default selected option
-        combo.bind("<<ComboboxSelected>>", selectedDataType)  # bind any event to a selection
-        ddListLabel = Label(contentFrame, text="Choose your data type for the graph to be generated:", font=(30))
+        combi = ttk.Combobox(contentFrame, value=dataType, font=(20), width=80)  # using tkinter's combobox as the drop down lsit
+        combi.current(0)  # displays the default selected option
+        combi.bind("<<ComboboxSelected>>", displayGraphNameAccordingToDataType)  # bind any event to a selection
+        dropdownListLabel = Label(contentFrame, text="Choose your data type for the graph to be generated:", font=(30))
 
         # packing area (Used to pack any functions from tkinter into the screen)
-        ddListLabel.pack(pady=50)
-        combo.pack()
+        dropdownListLabel.pack(pady=50)
+        combi.pack()
 
     def tableData():
         """This function runs when users navigate to the 'View Covid-19 data' Button"""
@@ -102,29 +102,29 @@ def fileBrowser():
 
         def hideLocal():  # function to hide local button to prevent users from generating multiple tables
             #tableFunctions.lclicked()
-            buttonLocal.destroy()
-            buttonImported.destroy()
+            localbtn.destroy()
+            importedbtn.destroy()
             infoTable.destroy()
             return
 
         def hideImported():  # function to hide imported button to prevent users from generating multiple tables
             #tableFunctions.impclicked()
-            buttonLocal.destroy()
-            buttonImported.destroy()
+            localbtn.destroy()
+            importedbtn.destroy()
             infoTable.destroy()
             return
 
         tableFunctions.getFrame(
             contentFrame)  # passes information on the selected frame to display the table through parameters
         infoTable = Label(contentFrame, text="Click on one of the buttons below to view data of 'Local' or 'Imported' cases.", font=(30))
-        buttonLocal = Button(contentFrame, text="Display Local Cases Table", font=(200), width=100, bg="white",
+        localbtn = Button(contentFrame, text="Display Local Cases Table", font=(200), width=100, bg="white",
                              command=hideLocal)  # clicking one button to display local/imported data will hide buttons and display table, vice versa
-        buttonImported = Button(contentFrame, text="Display Imported Cases Table", command=hideImported, font=(200), width=100, bg="white")
+        importedbtn = Button(contentFrame, text="Display Imported Cases Table", command=hideImported, font=(200), width=100, bg="white")
 
         # function packing area
         infoTable.pack(fill=BOTH, pady=50)
-        buttonLocal.pack(pady=20)
-        buttonImported.pack(pady=20)
+        localbtn.pack(pady=20)
+        importedbtn.pack(pady=20)
 
         # default packing area
         buttonFrame.pack()  # Navigation bar buttons
@@ -139,7 +139,7 @@ def fileBrowser():
         Label(topFrame,
               text="Search and display specific data by selecting the columns and conditions below: ", font=(30)).grid(row=0, pady=10)
 
-        columnChoice = [  # Drop down options
+        colChoice = [  # Drop down options
             "Case ID",
             "Confirmed Date",
             "Hospital",
@@ -153,8 +153,8 @@ def fileBrowser():
         ]
 
         clicked = StringVar()  # used to store the value of the dropdown list
-        clicked.set(columnChoice[0])  # current default value
-        columnChoose = OptionMenu(topFrame, clicked, *columnChoice)  # specifies the dropdown list options
+        clicked.set(colChoice[0])  # current default value
+        columnChoose = OptionMenu(topFrame, clicked, *colChoice)  # specifies the dropdown list options
         Label(topFrame, text="Column (example: CaseID): ", font=10).grid()
         columnChoose.grid()  # places the dropdown list in the gui using grid method
         Label(topFrame, text="Value (example: case-1): ", font=10).grid()
@@ -275,9 +275,9 @@ def fileBrowser():
         def exportOnly():  # export function
             """Sends the sorted data table settings to the emailFunction file to be exported"""
             if sortedData.get() == "Ascending":  # sorts according to drop down list option
-                """emailFunctions.exportOnly(column.get(), True)
+                emailFunctions.exportOnly(column.get(), True)
             elif sortedData.get() == "Descending":
-                emailFunctions.exportOnly(column.get(), False)"""
+                emailFunctions.exportOnly(column.get(), False)
 
         emailTo = Label(contentFrame, text="Input Recipient e-mail address: ")
         recipient = Entry(contentFrame)  # user input for recipient
@@ -309,11 +309,11 @@ def fileBrowser():
     def startFromMenu():
         """This function re-does the gui navigation bar and frames after navigating from the menu page"""
         mainMenuFrame.pack_forget()  # removes any frame used for the main menu page
-        graphData()  # brings user to the graph data page
+        graphdata()  # brings user to the graph data page
 
         # creating of navigation bars
         homePageMenu = Button(buttonFrame, text="Main Menu", command=mainMenu, padx=20, pady=10)
-        barGraphButtonMenu = Button(buttonFrame, text="Generate Graph", padx=20, pady=10, command=graphData)
+        barGraphButtonMenu = Button(buttonFrame, text="Generate Graph", padx=20, pady=10, command=graphdata)
         displayDataTableMenu = Button(buttonFrame, text="Read Covid-19 Data", padx=30, pady=10, command=tableData)
         sendEmailButtonMenu = Button(buttonFrame, text="Sort, export and send data as e-mail", padx=30, pady=10,
                                      command=sendEmail)
@@ -367,7 +367,7 @@ def fileBrowser():
 
     # Main Buttons creation section
     homePage = Button(buttonFrame, text="Main Menu", command=mainMenu, padx=20, pady=10)
-    barGraphButton = Button(buttonFrame, text="Generate Graph", padx=20, pady=10, command=graphData)
+    barGraphButton = Button(buttonFrame, text="Generate Graph", padx=20, pady=10, command=graphdata)
     displayDataTable = Button(buttonFrame, text="Read Covid-19 Data", padx=30, pady=10, command=tableData)
     sendEmailButton = Button(buttonFrame, text="Sort, export and send data as e-mail", padx=30, pady=10, command=sendEmail)
     listDataButton = Button(buttonFrame, text="List Data", padx=30, pady=10, command=searchData)
