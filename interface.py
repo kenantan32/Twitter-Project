@@ -32,7 +32,7 @@ def fileBrowser():
     browseButton.destroy()
 
     # Window that updates after selecting CSV file
-    gui.geometry("1000x650")
+    gui.geometry("900x600+10+10")
 
     def graphdata():
         """Upon Navigating to the 'Generate Graph' Button, this function will run"""
@@ -169,9 +169,7 @@ def fileBrowser():
                 self.scrollable_frame.bind(
                     "<Configure>",
                     lambda e: canvas.configure(
-                        scrollregion=canvas.bbox("all")
-                    )
-                )
+                        scrollregion=canvas.bbox("all")) )
 
                 canvas.create_window((0, 0), window=self.scrollable_frame, anchor="nw")
 
@@ -211,9 +209,7 @@ def fileBrowser():
         emailMainLabel = Label(contentFrame, text="Sort Table based on: ")
 
         sortType = [  # dropdown/sorting list options
-            "Ascending",
-            "Descending",
-        ]
+            "Ascending", "Descending",]
 
         def sortData(event):
             """Sorts the data and sends it to the emailFunctions file"""
@@ -231,9 +227,7 @@ def fileBrowser():
             ("ID", "ID"),
             ("Gender", "Gender"),
             ("Age", "Age"),
-            ("Nationality", "Nationality"),
-
-        ]
+            ("Nationality", "Nationality"),]
 
         column = StringVar()  # string var to store the option that will be selected
         column.set("ID")  # set default selected value to ID
@@ -242,8 +236,7 @@ def fileBrowser():
         i = 0  # counter for column placement
         for text, mode in columnType:  # for every option there is for columns, generate a radio button
             i += 1
-            Radiobutton(radioButtonFrame, text=text, variable=column, value=mode).grid(row=0,
-                                                                                       column=i)  # radio button generated and placed according to their position (i)
+            Radiobutton(radioButtonFrame, text=text, variable=column, value=mode).grid(row=0, column=i)  # radio button generated and placed according to their position (i)
 
         def sendEmailTo():  # send email function
             """Sends the recipient info and the sorted data table settings to the emailFunction file to be sent"""
@@ -365,14 +358,10 @@ def fileBrowser():
     def abc():
         try:
             # stores the file path of the user selected data-set to be used with our other functions
-            tempdir = filedialog.askopenfilename(initialdir="",
-                                                 title="Select Dataset File",
-                                                 filetypes=((".csv Files", "*.csv"), ("All Files", "*.*")))
+            tempdir = filedialog.askopenfilename(initialdir="",  title="Select Dataset File", filetypes=((".csv Files", "*.csv"), ("All Files", "*.*")))
             # sending file path to var so other functions can use the file path
             # parse file path
-            if tempdir[-3:].lower() not in ['csv', 'prn', 'xls', 'ods'] and tempdir[-4:].lower() not in ['xlsx', 'xltx',
-                                                                                                         'xlsm',
-                                                                                                         'xlsb']:
+            if tempdir[-3:].lower() not in ['csv', 'prn', 'xls', 'ods'] and tempdir[-4:].lower() not in ['xlsx', 'xltx', 'xlsm',  'xlsb']:
                 messagebox.showerror("Warning", "Choose a CSV file!")  # Error messagebox
             else:
                 """frame.convertToDF(tempdir)"""
@@ -408,10 +397,10 @@ def jkl():
         messagebox.showerror("Warning", "Error!")
 
 # Create Label to instruct users to browse for data
-MainPageLabel1 = Label(gui, text="Welcome to our program!")
+MainPageLabel1 = Label(gui, text="Welcome!")
 MainPageLabel2 = Label(gui, text="Click on the button above to browse for a Dataset!")
 # Button to browse for Dataset
-browseButton = Button(gui, text="Browse", padx=30, pady=10, command=jkl)
+browseButton = Button(gui, text="Browse", padx=20, pady=8, bg="light blue", command=jkl)
 
 # PACK SECTION
 MainPageLabel1.pack(ipadx=20, ipady=20)
