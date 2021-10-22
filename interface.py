@@ -1,10 +1,10 @@
 from tkinter import *
 from tkinter import ttk
-"""import frame
-import appFunctions
-import tableFunctions
-import emailFunctions
-import searchFunctions"""
+import frame
+#import appFunctions
+#import tableFunctions
+#import emailFunctions
+#import searchFunctions
 import http.server
 from tkinter import filedialog, Tk, messagebox, Button, Label, PhotoImage, Listbox, StringVar, Toplevel
 # imported modules used for GUI to function
@@ -103,10 +103,10 @@ def fileBrowser():
 
         tableFunctions.getFrame(
             contentFrame)  # passes information on the selected frame to display the table through parameters
-        infoTable = Label(contentFrame, text="Click on one of the buttons below to view data of 'Local' or 'Imported' cases.", font=("Microsoft Sans Serif",30))
+        infoTable = Label(contentFrame, text="Click on one of the buttons below to view data of 'Local' or 'Imported' cases.", font=("Microsoft Sans Serif",20))
         localbtn = Button(contentFrame, text="Display Local Cases Table", font=(200), width=100, bg="white",
                              command=hideLocal)  # clicking one button to display local/imported data will hide buttons and display table, vice versa
-        importedbtn = Button(contentFrame, text="Display Imported Cases Table", command=hideImported, font=("Microsoft Sans Serif",200), width=100, bg="white")
+        importedbtn = Button(contentFrame, text="Display Imported Cases Table", command=hideImported, font=("Microsoft Sans Serif",20), width=100, bg="white")
 
         # function packing area
         infoTable.pack(fill=BOTH, pady=50)
@@ -124,7 +124,7 @@ def fileBrowser():
         topFrame = Frame(contentFrame, height=100, width=100,
                          relief=SUNKEN)  # top frame used to seperate between frame that is used to search and frame that displays data
         Label(topFrame,
-              text="Search and display specific data by selecting the columns and conditions below: ", font=("Microsoft Sans Serif",30)).grid(row=0, pady=10)
+              text="Search and display specific data by selecting the columns and conditions below: ", font=("Microsoft Sans Serif",20)).grid(row=0, pady=10)
 
         colChoice = [  # Drop down options
             "Case ID",
@@ -152,7 +152,7 @@ def fileBrowser():
         def searchColumns():
             userInput = v.get()  # gets the user input
             columnInput = clicked.get()  # gets the dropdown list option selected
-            #searchFunctions.showSearchData(columnInput, userInput)  # execute search/sort by using the user inputs
+            searchFunctions.showSearchData(columnInput, userInput)  # execute search/sort by using the user inputs
             return
 
         searchButton = Button(topFrame, text="Search",
@@ -223,26 +223,20 @@ def fileBrowser():
             elif sortedData.get() == "Descending":
                 emailFunctions.readData(treeview1, column.get(), False)
 
-        sortedData = ttk.Combobox(contentFrame,
-                                  value=sortType)  # combobox listens to the option being selected and executes the command
+        sortedData = ttk.Combobox(contentFrame, value=sortType)  # combobox listens to the option being selected and executes the command
         sortedData.current(0)  # set default drop down box value
         sortedData.bind("<<ComboboxSelected>>", sortData)  # bind the combobox with the options
 
         columnType = [  # radio button selections
-            ("CaseID", "CaseID"),
-            ("Confirmed Date", "Confirmed Date"),
-            ("Hospital", "Hospital"),
-            ("Discharged Date", "Discharged Date"),
+            ("ID", "ID"),
             ("Gender", "Gender"),
             ("Age", "Age"),
             ("Nationality", "Nationality"),
-            ("Transmission Source", "Transmission Source"),
-            ("Date of Death", "Date of Death"),
-            ("Places Visited", "Places Visited",)
+
         ]
 
         column = StringVar()  # string var to store the option that will be selected
-        column.set("CaseID")  # set default selected value to caseID
+        column.set("ID")  # set default selected value to ID
         radioButtonFrame = Frame(contentFrame, height=30, width=100)  # generates a frame to store the radio buttons
 
         i = 0  # counter for column placement
@@ -266,7 +260,7 @@ def fileBrowser():
             elif sortedData.get() == "Descending":
                 emailFunctions.exportOnly(column.get(), False)
 
-        emailTo = Label(contentFrame, text="Input Recipient e-mail address: ")
+        emailTo = Label(contentFrame, text="Input recipient's e-mail address: ")
         recipient = Entry(contentFrame)  # user input for recipient
         sendButton = Button(contentFrame, text='Export and Send file as E-mail (Following format chosen above)',
                             command=sendEmailTo)
@@ -310,15 +304,10 @@ def fileBrowser():
         # default pack/grid area to place the buttons back
         homePageMenu.grid(row=0, column=0)
         barGraphButtonMenu.grid(row=0, column=1)
-        displayDataTableMenu.grid(row=0, column=2)
-        listDataButtonMenu.grid(row=0, column=3)
+        #displayDataTableMenu.grid(row=0, column=2)
+        #listDataButtonMenu.grid(row=0, column=3)
         sendEmailButtonMenu.grid(row=0, column=4)
         exitButtonMenu.grid(row=0, column=5)
-
-    def fileBrowserFromMenu():  # will run if user selects the option to reupload dataset from the menu page
-        """This function runs if user selects the option to reupload dataset from the menu page"""
-        abc()  # prompts user to select file again
-        mainMenuFrame.pack_forget()  # removes the mainmenuframe
 
     def mainMenu():
         """Function runs when users navigate to the main menu"""
@@ -335,7 +324,7 @@ def fileBrowser():
         startUse = Button(mainMenuFrame, text="Start Application", font=("Microsoft Yahei UI", 15), padx=44, pady=10,
                           command=startFromMenu)  # create start application button
         reUpload = Button(mainMenuFrame, text="Upload A New Dataset", font=("Microsoft Yahei UI", 15), padx=24, pady=10,
-                          command=fileBrowserFromMenu)  # create reupload button
+                          command=abc)  # create reupload button
         exitFromMenu = Button(mainMenuFrame, text="QUIT", padx=30, font=("Microsoft Yahei UI", 15), pady=10,
                               command=exitWindow)  # create exit button
 
@@ -355,16 +344,17 @@ def fileBrowser():
     # Main Buttons creation section
     homePage = Button(buttonFrame, text="Main Menu", command=mainMenu, padx=20, pady=10)
     barGraphButton = Button(buttonFrame, text="Generate Graph", padx=20, pady=10, command=graphdata)
-    displayDataTable = Button(buttonFrame, text="Read Covid-19 Data", padx=30, pady=10, command=tableData)
-    sendEmailButton = Button(buttonFrame, text="Sort, export and send data as e-mail", padx=30, pady=10, command=sendEmail)
-    listDataButton = Button(buttonFrame, text="List Data", padx=30, pady=10, command=searchData)
+    # displayDataTable = Button(buttonFrame, text="Read Covid-19 Data", padx=30, pady=10, command=tableData)
+    sendEmailButton = Button(buttonFrame, text="Sort, export and send data as e-mail", padx=30, pady=10,
+                             command=sendEmail)
+    # listDataButton = Button(buttonFrame, text="List Data", padx=30, pady=10, command=searchData)
     exitButton = Button(buttonFrame, text="QUIT the Application", padx=30, pady=10, command=exitWindow)
 
     # packing/grid area to display into the gui
     homePage.grid(row=0, column=0)
     barGraphButton.grid(row=0, column=1)
-    displayDataTable.grid(row=0, column=2)
-    listDataButton.grid(row=0, column=3)
+    #displayDataTable.grid(row=0, column=2)
+    #listDataButton.grid(row=0, column=3)
     sendEmailButton.grid(row=0, column=4)
     exitButton.grid(row=0, column=5)
     buttonFrame.pack()
@@ -372,23 +362,24 @@ def fileBrowser():
     contentFrame.pack()
     Label(contentFrame, text="Start by navigating to one of our functions", font=("fixedsys", 20), fg='white', bg='black').pack(padx=50)  # Welcome page
 
+    def abc():
+        try:
+            # stores the file path of the user selected data-set to be used with our other functions
+            tempdir = filedialog.askopenfilename(initialdir="",
+                                                 title="Select Dataset File",
+                                                 filetypes=((".csv Files", "*.csv"), ("All Files", "*.*")))
+            # sending file path to var so other functions can use the file path
+            # parse file path
+            if tempdir[-3:].lower() not in ['csv', 'prn', 'xls', 'ods'] and tempdir[-4:].lower() not in ['xlsx', 'xltx',
+                                                                                                         'xlsm',
+                                                                                                         'xlsb']:
+                messagebox.showerror("Warning", "Choose a CSV file!")  # Error messagebox
+            else:
+                """frame.convertToDF(tempdir)"""
+                startFromMenu()
+        except:
+            messagebox.showerror("Warning", "Error!")
 
-def abc():
-    try:
-        # stores the file path of the user selected data-set to be used with our other functions
-        tempdir = filedialog.askopenfilename(initialdir="",
-                                           title="Select Dataset File",
-                                           filetypes=((".csv Files", "*.csv"), ("All Files", "*.*")))
-    # sending file path to var so other functions can use the file path
-          # parse file path
-        if tempdir[-3:].lower() not in ['csv', 'prn', 'xls', 'ods'] and tempdir[-4:].lower() not in ['xlsx', 'xltx', 'xlsm',
-                                                                                                 'xlsb']:
-            messagebox.showerror("Warning", "Choose a CSV file!")  # Error messagebox
-        else:
-            """frame.convertToDF(tempdir)"""
-            fileBrowser()
-    except:
-        messagebox.showerror("Warning", "Error!")
 
 # initialise starting GUI Window
 gui = Tk()
@@ -397,11 +388,30 @@ gui.title("Covid-19 Data Crawler")
 gui.geometry("300x200")
 gui.attributes('-topmost', True)
 
+
+def jkl():
+    try:
+        # stores the file path of the user selected data-set to be used with our other functions
+        tempdir = filedialog.askopenfilename(initialdir="",
+                                             title="Select Dataset File",
+                                             filetypes=((".csv Files", "*.csv"), ("All Files", "*.*")))
+        # sending file path to var so other functions can use the file path
+        # parse file path
+        if tempdir[-3:].lower() not in ['csv', 'prn', 'xls', 'ods'] and tempdir[-4:].lower() not in ['xlsx', 'xltx',
+                                                                                                     'xlsm',
+                                                                                                     'xlsb']:
+            messagebox.showerror("Warning", "Choose a CSV file!")  # Error messagebox
+        else:
+            """frame.convertToDF(tempdir)"""
+            fileBrowser()
+    except:
+        messagebox.showerror("Warning", "Error!")
+
 # Create Label to instruct users to browse for data
 MainPageLabel1 = Label(gui, text="Welcome to our program!")
 MainPageLabel2 = Label(gui, text="Click on the button above to browse for a Dataset!")
 # Button to browse for Dataset
-browseButton = Button(gui, text="Browse", padx=30, pady=10, command=abc)
+browseButton = Button(gui, text="Browse", padx=30, pady=10, command=jkl)
 
 # PACK SECTION
 MainPageLabel1.pack(ipadx=20, ipady=20)
