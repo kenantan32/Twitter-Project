@@ -3,7 +3,7 @@ from tkinter import ttk
 #import frame
 #import appFunctions
 #import tableFunctions
-#import emailFunctions
+import emailFunctions
 #import searchFunctions
 import http.server
 from tkinter import filedialog, Tk, messagebox, Button, Label, PhotoImage, Listbox, StringVar, Toplevel
@@ -96,40 +96,6 @@ def fileBrowser():
         dropdownListLabel.pack(pady=50)
         combi.pack()
 
-    def tableData():
-        """This function runs when users navigate to the 'View Covid-19 data' Button"""
-        hideFrames()
-
-        def hideLocal():  # function to hide local button to prevent users from generating multiple tables
-            #tableFunctions.lclicked()
-            localbtn.destroy()
-            importedbtn.destroy()
-            infoTable.destroy()
-            return
-
-        def hideImported():  # function to hide imported button to prevent users from generating multiple tables
-            #tableFunctions.impclicked()
-            localbtn.destroy()
-            importedbtn.destroy()
-            infoTable.destroy()
-            return
-
-        tableFunctions.getFrame(contentFrame)  # passes information on the selected frame to display the table through parameters
-        infoTable = Label(contentFrame, text="Click on one of the buttons below to view data of 'Local' or 'Imported' cases.", font=("Microsoft Sans Serif",20))
-        localbtn = Button(contentFrame, text="Display Local Cases Table", font=(200), width=100, bg="white",
-                             command=hideLocal)  # clicking one button to display local/imported data will hide buttons and display table, vice versa
-        importedbtn = Button(contentFrame, text="Display Imported Cases Table", command=hideImported, font=("Microsoft Sans Serif",20), width=100, bg="white")
-
-        # function packing area
-        infoTable.pack(fill=BOTH, pady=50)
-        localbtn.pack(pady=20)
-        importedbtn.pack(pady=20)
-
-        # default packing area
-        buttonFrame.pack()  # Navigation bar buttons
-        mainframe.pack(fill=BOTH, expand=1)  # frame to store contentFrame
-        contentFrame.pack(fill=BOTH, expand=1)  # frame storing content
-
     def DataFour():
         def buttoncommand():
             searchTerm = entry1.get()
@@ -180,10 +146,16 @@ def fileBrowser():
                     print("Row Number:" + str(count) + " (English Tweet)")
 
             print("Refer to DataSet.csv for result")
-            os.system('K:/Programs/Python/python.exe textprocessing.py')
-            os.system('K:/Programs/Python/python.exe wordcloudgenerator.py')
-            os.system('K:/Programs/Python/python.exe topicmodelling.py')
+
+            #def displayGraphNameAccordingToDataType2(event):
+            """This function listens to the 'event' and displays the graph based on the datatype selected using the combobox"""
+                #if combi.get() == "Top 10 words for each emotion":
             os.system('K:/Programs/Python/python.exe emotionanalysis.py')
+                #elif combi.get() == "LDA Topics":
+            os.system('K:/Programs/Python/python.exe topicmodelling.py')
+                #elif combi.get() == "Wordcloud of tweets":
+            os.system('K:/Programs/Python/python.exe wordcloudgenerator.py')
+
             label1.destroy()
             entry1.destroy()
             label2.destroy()
@@ -223,8 +195,26 @@ def fileBrowser():
         label2.pack()
         entry2 = Entry(contentFrame, width=20)
         entry2.pack()
+        dataType = [  # dropdown list options
+            "Top 10 words for each emotion",
+            "LDA Topics",
+            "Wordcloud of tweets",
+
+        ]
+
+        clicked = StringVar()
+        clicked.set(dataType[0])
+
+        combi2 = ttk.Combobox(contentFrame, value=dataType,
+                              width=80)  # using tkinter's combobox as the drop down lsit
+        combi2.current(0)  # displays the default selected option
+        # combi2.bind("<<ComboboxSelected>>", displayGraphNameAccordingToDataType2)  # bind any event to a selection
+        dropdownListLabel2 = Label(contentFrame, text="Choose the graph to be generated:")
+        dropdownListLabel2.pack(pady=50)
+        combi2.pack()
         button1 = Button(contentFrame, text="Search", command=buttoncommand)
         button1.pack()
+
         bottom_frame = Frame(gui)
         bottom_frame.pack()
 
@@ -233,72 +223,6 @@ def fileBrowser():
         mainframe.pack(fill=BOTH, expand=1)
         contentFrame.pack(fill=BOTH, expand=1)
 
-
-
-    def searchData():
-        """This function is used to search for column-specific data"""
-        hideFrames()  # to reset frame
-        topFrame = Frame(contentFrame, height=100, width=100,
-                         relief=SUNKEN)  # top frame used to seperate between frame that is used to search and frame that displays data
-        Label(topFrame,
-              text="Search and display specific data by selecting the columns and conditions below: ", font=("Microsoft Sans Serif",20)).grid(row=0, pady=10)
-
-        colChoice = [  # Drop down options
-            "ID",
-            "Gender",
-            "Age",
-            "Nationality",
-        ]
-
-        clicked = StringVar()  # used to store the value of the dropdown list
-        clicked.set(colChoice[0])  # current default value
-        columnChoose = OptionMenu(topFrame, clicked, *colChoice)  # specifies the dropdown list options
-        Label(topFrame, text="Column (example: ID): ", font=("Microsoft Sans Serif",10)).grid()
-        columnChoose.grid()  # places the dropdown list in the gui using grid method
-        Label(topFrame, text="Value (example: case-1): ", font=("Microsoft Sans Serif",10)).grid()
-
-        v = StringVar()  # initialise variable to store user input
-        Entry(topFrame, textvariable=v).grid(padx=10)  # user input box
-
-        def searchColumns():
-            userInput = v.get()  # gets the user input
-            columnInput = clicked.get()  # gets the dropdown list option selected
-            searchFunctions.showSearchData(columnInput, userInput)  # execute search/sort by using the user inputs
-            return
-
-        searchButton = Button(topFrame, text="Search",
-                              command=searchColumns)  # executes the serach columns function
-        searchButton.grid()  # places the search button on the gui
-
-        class ScrollableFrame(Frame):  # This class generates the frame that is used to store the data being displayed
-            def __init__(self, container, *args, **kwargs):
-                super().__init__(container, *args, **kwargs)
-                canvas = Canvas(self)
-                scrollbar = ttk.Scrollbar(self, orient="vertical", command=canvas.yview)
-                self.scrollable_frame = ttk.Frame(canvas)
-
-                self.scrollable_frame.bind( "<Configure>",  lambda e: canvas.configure(scrollregion=canvas.bbox("all")) )
-
-                canvas.create_window((0, 0), window=self.scrollable_frame, anchor="nw")
-
-                canvas.configure(yscrollcommand=scrollbar.set)
-
-                canvas.pack(side="left", expand=True)
-                scrollbar.pack(side="right", fill="y")
-
-        scrollFrame = ScrollableFrame(contentFrame)  # places the displaying data frame into the content holding frame
-        searchFunctions.getFrameFromGui(scrollFrame.scrollable_frame)  # sends information to the function on where to place the data
-
-        # function packing area
-        topFrame.pack()  # display/packs the top frame on screen
-        scrollFrame.pack(fill=BOTH, expand=1)
-
-        # default packing area
-        buttonFrame.pack()
-        mainframe.pack(fill=BOTH, expand=1)
-        contentFrame.pack(fill=BOTH, expand=1)
-
-        return
 
     def sendEmail():
         """This function is used to export and send the data through E-mail in the GUI"""
@@ -348,13 +272,6 @@ def fileBrowser():
             i += 1
             Radiobutton(radioButtonFrame, text=text, variable=column, value=mode).grid(row=0, column=i)  # radio button generated and placed according to their position (i)
 
-        def sendEmailTo():  # send email function
-            """Sends the recipient info and the sorted data table settings to the emailFunction file to be sent"""
-            a = recipient.get()  # get the user input
-            if sortedData.get() == "Ascending":  # sorts according to drop down list option
-                emailFunctions.export(a, column.get(), True)
-            elif sortedData.get() == "Descending":
-                emailFunctions.export(a, column.get(), False)
 
         def exportOnly():  # export function
             """Sends the sorted data table settings to the emailFunction file to be exported"""
@@ -363,20 +280,13 @@ def fileBrowser():
             elif sortedData.get() == "Descending":
                 emailFunctions.exportOnly(column.get(), False)
 
-        emailTo = Label(contentFrame, text="Input recipient's e-mail address: ")
-        recipient = Entry(contentFrame)  # user input for recipient
-        sendButton = Button(contentFrame, text='Export and Send file as E-mail (Following format chosen above)',
-                            command=sendEmailTo)
         exportButton = Button(contentFrame, text='Export the file ONLY (Following format chosen above)', command=exportOnly)
 
         # function packing area
         radioButtonFrame.pack()
         emailMainLabel.pack()
         sortedData.pack()
-        emailTo.pack()
-        recipient.pack()
         exportButton.pack(pady=5)
-        sendButton.pack(pady=5)
         treeFrame.pack(fill=BOTH, expand=1)
         treeScrollx.pack(side="bottom", fill="x")  # make the scrollbar fill the x axis of the Treeview widget
         treeScrolly.pack(side="right", fill="y")  # make the scrollbar fill the y axis of the Treeview widget
@@ -397,19 +307,17 @@ def fileBrowser():
 
         # creating of navigation bars
         homePageMenu = Button(buttonFrame, text="Main Menu", command=mainMenu, padx=20, pady=10)
-        barGraphButtonMenu = Button(buttonFrame, text="Generate Graph", padx=20, pady=10, command=graphdata)
-        displayDataTableMenu = Button(buttonFrame, text="Read Covid-19 Data", padx=30, pady=10, command=tableData)
-        sendEmailButtonMenu = Button(buttonFrame, text="Sort, export and send data as e-mail", padx=30, pady=10,
-                                     command=DataFour)
-        listDataButtonMenu = Button(buttonFrame, text="List Data", padx=30, pady=10, command=searchData)
+        graphButtonMenu = Button(buttonFrame, text="Generate Graph", padx=20, pady=10,
+                                    command=DataFour)
+        exportButtonMenu = Button(buttonFrame, text="Export Data", padx=30, pady=10, command=sendEmail)
         exitButtonMenu = Button(buttonFrame, text="QUIT the Application", padx=30, pady=10, command=exitWindow)
 
         # default pack/grid area to place the buttons back
         homePageMenu.grid(row=0, column=0)
-        barGraphButtonMenu.grid(row=0, column=1)
+        graphButtonMenu.grid(row=0, column=1)
         #displayDataTableMenu.grid(row=0, column=2)
         #listDataButtonMenu.grid(row=0, column=3)
-        sendEmailButtonMenu.grid(row=0, column=4)
+        exportButtonMenu.grid(row=0, column=4)
         exitButtonMenu.grid(row=0, column=5)
 
     def mainMenu():
@@ -446,20 +354,19 @@ def fileBrowser():
 
     # Main Buttons creation section
     homePage = Button(buttonFrame, text="Main Menu", command=mainMenu, padx=20, pady=10)
-    barGraphButton = Button(buttonFrame, text="Generate Graph", padx=20, pady=10, command=graphdata)
+    barGraphButton = Button(buttonFrame, text="Generate Graph", padx=20, pady=10, command=DataFour)
     # displayDataTable = Button(buttonFrame, text="Read Covid-19 Data", padx=30, pady=10, command=tableData)
-    sendEmailButton = Button(buttonFrame, text="Sort, export and send data as e-mail", padx=30, pady=10,
-                             command=DataFour)
-    # listDataButton = Button(buttonFrame, text="List Data", padx=30, pady=10, command=searchData)
-    exitButton = Button(buttonFrame, text="QUIT the Application", padx=30, pady=10, command=exitWindow)
+    exportButton = Button(buttonFrame, text="Export data", padx=30, pady=10,
+                             command=sendEmail)
+    exitButton = Button(buttonFrame, text="Quit the Application", padx=30, pady=10, command=exitWindow)
 
     # packing/grid area to display into the gui
     homePage.grid(row=0, column=0)
     barGraphButton.grid(row=0, column=1)
     #displayDataTable.grid(row=0, column=2)
     #listDataButton.grid(row=0, column=3)
-    sendEmailButton.grid(row=0, column=4)
-    exitButton.grid(row=0, column=5)
+    exportButton.grid(row=0, column=2)
+    exitButton.grid(row=0, column=3)
     buttonFrame.pack()
     mainframe.pack(fill=BOTH, expand=1)
     contentFrame.pack()
