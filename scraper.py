@@ -244,22 +244,16 @@ def fileBrowser():
               text="Search and display specific data by selecting the columns and conditions below: ", font=("Microsoft Sans Serif",20)).grid(row=0, pady=10)
 
         colChoice = [  # Drop down options
-            "Case ID",
-            "Confirmed Date",
-            "Hospital",
-            "Discharged Date",
+            "ID",
             "Gender",
             "Age",
             "Nationality",
-            "Transmission Source",
-            "Date of Death",
-            "Places Visited",
         ]
 
         clicked = StringVar()  # used to store the value of the dropdown list
         clicked.set(colChoice[0])  # current default value
         columnChoose = OptionMenu(topFrame, clicked, *colChoice)  # specifies the dropdown list options
-        Label(topFrame, text="Column (example: CaseID): ", font=("Microsoft Sans Serif",10)).grid()
+        Label(topFrame, text="Column (example: ID): ", font=("Microsoft Sans Serif",10)).grid()
         columnChoose.grid()  # places the dropdown list in the gui using grid method
         Label(topFrame, text="Value (example: case-1): ", font=("Microsoft Sans Serif",10)).grid()
 
