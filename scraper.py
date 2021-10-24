@@ -3,7 +3,7 @@ from tkinter import ttk
 #import frame
 #import appFunctions
 #import tableFunctions
-import exportFunctions
+import emailFunctions
 #import searchFunctions
 import http.server
 from tkinter import filedialog, Tk, messagebox, Button, Label, PhotoImage, Listbox, StringVar, Toplevel
@@ -47,56 +47,11 @@ def fileBrowser():
     # Window that updates after selecting CSV file
     gui.geometry("900x600+10+10")
 
-    def graphdata():
-        """Upon Navigating to the 'Generate Graph' Button, this function will run"""
-        hideFrames()
-        # To disable button from being able to be pressed again.
-        buttonFrame.pack()
-        mainframe.pack(fill=BOTH, expand=1)
-        contentFrame.pack(fill=BOTH, expand=1)
-        dataType = [  # dropdown list options
-            "Top 10 words for each emotion",
-            "Graph 2",
-            "Graph 3",
-            "Graph 4",
-            "Graph 5",
-            "Graph 6",
 
-        ]
 
-        clicked = StringVar()
-        clicked.set(dataType[0])
 
-        def displayGraphNameAccordingToDataType(event):
-            """This function listens to the 'event' and displays the graph based on the datatype selected using the combobox"""
-            if combi.get() == "Top 10 words for each emotion":
-                appFunctions.ageBarGraph()
 
-            elif combi.get() == "Graph 2":
-                appFunctions.cfmCaseWeekBarChart()
-
-            elif combi.get() == "Graph 3":
-                appFunctions.natDaysLineGraph()
-
-            elif combi.get() == "Graph 4":
-                appFunctions.srcLineGraph()
-
-            elif combi.get() == "Graph 5":
-                appFunctions.facilitiesGeogMap()
-
-            elif combi.get() == "Graph 6":
-                appFunctions.facilitiesPieChart()
-
-        combi = ttk.Combobox(contentFrame, value=dataType, font=("Microsoft Sans Serif",20), width=80)  # using tkinter's combobox as the drop down lsit
-        combi.current(0)  # displays the default selected option
-        combi.bind("<<ComboboxSelected>>", displayGraphNameAccordingToDataType)  # bind any event to a selection
-        dropdownListLabel = Label(contentFrame, text="Choose the graph to be generated:", font=("Microsoft Sans Serif",24))
-
-        # packing area (Used to pack any functions from tkinter into the screen)
-        dropdownListLabel.pack(pady=50)
-        combi.pack()
-
-    def DataFour():
+    def graphData():
         def buttoncommand():
             searchTerm = entry1.get()
             numberOfTweets = entry2.get()
@@ -303,22 +258,20 @@ def fileBrowser():
     def startFromMenu():
         """This function re-does the gui navigation bar and frames after navigating from the menu page"""
         mainMenuFrame.pack_forget()  # removes any frame used for the main menu page
-        graphdata()  # brings user to the graph data page
+        graphData()  # brings user to the graph data page
 
         # creating of navigation bars
         homePageMenu = Button(buttonFrame, text="Main Menu", command=mainMenu, padx=20, pady=10)
         graphButtonMenu = Button(buttonFrame, text="Generate Graph", padx=20, pady=10,
-                                    command=DataFour)
+                                    command=graphData)
         exportButtonMenu = Button(buttonFrame, text="Export Data", padx=30, pady=10, command=sendEmail)
         exitButtonMenu = Button(buttonFrame, text="QUIT the Application", padx=30, pady=10, command=exitWindow)
 
         # default pack/grid area to place the buttons back
         homePageMenu.grid(row=0, column=0)
         graphButtonMenu.grid(row=0, column=1)
-        #displayDataTableMenu.grid(row=0, column=2)
-        #listDataButtonMenu.grid(row=0, column=3)
-        exportButtonMenu.grid(row=0, column=4)
-        exitButtonMenu.grid(row=0, column=5)
+        exportButtonMenu.grid(row=0, column=2)
+        exitButtonMenu.grid(row=0, column=3)
 
     def mainMenu():
         """Function runs when users navigate to the main menu"""
@@ -354,8 +307,7 @@ def fileBrowser():
 
     # Main Buttons creation section
     homePage = Button(buttonFrame, text="Main Menu", command=mainMenu, padx=20, pady=10)
-    barGraphButton = Button(buttonFrame, text="Generate Graph", padx=20, pady=10, command=DataFour)
-    # displayDataTable = Button(buttonFrame, text="Read Covid-19 Data", padx=30, pady=10, command=tableData)
+    barGraphButton = Button(buttonFrame, text="Generate Graph", padx=20, pady=10, command=graphData)
     exportButton = Button(buttonFrame, text="Export data", padx=30, pady=10,
                              command=sendEmail)
     exitButton = Button(buttonFrame, text="Quit the Application", padx=30, pady=10, command=exitWindow)
@@ -363,14 +315,12 @@ def fileBrowser():
     # packing/grid area to display into the gui
     homePage.grid(row=0, column=0)
     barGraphButton.grid(row=0, column=1)
-    #displayDataTable.grid(row=0, column=2)
-    #listDataButton.grid(row=0, column=3)
     exportButton.grid(row=0, column=2)
     exitButton.grid(row=0, column=3)
     buttonFrame.pack()
     mainframe.pack(fill=BOTH, expand=1)
     contentFrame.pack()
-    Label(contentFrame, text="Start by navigating to one of our functions", font=("Consolas", 20), fg='white', bg='orange').pack(padx=50)  # Welcome page
+    Label(contentFrame, text="Start by navigating to one of our functions!", font=("Consolas", 20), fg='white', bg='orange').pack(padx=10)  # Welcome page
 
     def abc():
         try:
