@@ -1,22 +1,14 @@
 from tkinter import *
 from tkinter import ttk
-#import frame
-#import appFunctions
-#import tableFunctions
 import emailFunctions
-#import searchFunctions
-import http.server
-from tkinter import filedialog, Tk, messagebox, Button, Label, PhotoImage, Listbox, StringVar, Toplevel
+from tkinter import filedialog, messagebox
 from tkinter import NW
-
 import twint
 from deep_translator import GoogleTranslator, single_detection
 import pandas as pd
-from tkinter import *
 import os
 from PIL import ImageTk, Image
 import tkinter.messagebox
-from tkinter import font
 
 
 # imported modules used for GUI to function
@@ -159,7 +151,7 @@ def fileBrowser():
         contentFrame.pack(fill=BOTH, expand=1)
 
 
-    def sendEmail():
+    def sendData():
         """This function is used to export and send the data through E-mail in the GUI"""
         hideFrames()  # resets the frame
 
@@ -173,7 +165,7 @@ def fileBrowser():
         treeview1.configure(xscrollcommand=treeScrollx.set,
                             yscrollcommand=treeScrolly.set)  # assign the scrollbars to the Treeview Widget
 
-        emailMainLabel = Label(contentFrame, text="Sort Table based on: ")
+        mainLabel = Label(contentFrame, text="Sort Table based on: ")
 
         sortType = [  # dropdown/sorting list options
             "Ascending", "Descending",]
@@ -219,7 +211,7 @@ def fileBrowser():
 
         # function packing area
         radioButtonFrame.pack()
-        emailMainLabel.pack()
+        mainLabel.pack()
         sortedData.pack()
         exportButton.pack(pady=5)
         treeFrame.pack(fill=BOTH, expand=1)
@@ -244,7 +236,7 @@ def fileBrowser():
         homePageMenu = Button(buttonFrame, text="Main Menu", command=mainMenu, padx=20, pady=10)
         graphButtonMenu = Button(buttonFrame, text="Generate Graph", padx=20, pady=10,
                                     command=graphData)
-        exportButtonMenu = Button(buttonFrame, text="Export Data", padx=30, pady=10, command=sendEmail)
+        exportButtonMenu = Button(buttonFrame, text="Export Data", padx=30, pady=10, command=sendData)
         exitButtonMenu = Button(buttonFrame, text="QUIT the Application", padx=30, pady=10, command=exitWindow)
 
         # default pack/grid area to place the buttons back
@@ -268,7 +260,7 @@ def fileBrowser():
         startUse = Button(mainMenuFrame, text="Start Application", font=("Microsoft Yahei UI", 15), padx=44, pady=10,
                           command=startFromMenu)  # create start application button
         reUpload = Button(mainMenuFrame, text="Upload A New Dataset", font=("Microsoft Yahei UI", 15), padx=24, pady=10,
-                          command=abc)  # create reupload button
+                          command=chooseFileFromMainMenu)  # create reupload button
         exitFromMenu = Button(mainMenuFrame, text="QUIT", padx=30, font=("Microsoft Yahei UI", 15), pady=10,
                               command=exitWindow)  # create exit button
 
@@ -289,7 +281,7 @@ def fileBrowser():
     homePage = Button(buttonFrame, text="Main Menu", command=mainMenu, padx=20, pady=10)
     barGraphButton = Button(buttonFrame, text="Generate Graph", padx=20, pady=10, command=graphData)
     exportButton = Button(buttonFrame, text="Export data", padx=30, pady=10,
-                             command=sendEmail)
+                             command=sendData)
     exitButton = Button(buttonFrame, text="Quit the Application", padx=30, pady=10, command=exitWindow)
 
     # packing/grid area to display into the gui
@@ -302,7 +294,7 @@ def fileBrowser():
     contentFrame.pack()
     Label(contentFrame, text="Start by navigating to one of our functions!", font=("Consolas", 20), fg='white', bg='orange').pack(padx=10)  # Welcome page
 
-    def abc():
+    def chooseFileFromMainMenu():
         try:
             # stores the file path of the user selected data-set to be used with our other functions
             tempdir = filedialog.askopenfilename(initialdir="",  title="Select Dataset File", filetypes=((".csv Files", "*.csv"), ("All Files", "*.*")))
@@ -352,7 +344,7 @@ def runData():
 
 
 
-def jkl():
+def chooseFilefromStartPage():
     try:
         # stores the file path of the user selected data-set to be used with our other functions
         tempdir = filedialog.askopenfilename(initialdir="",
@@ -378,7 +370,7 @@ try:
     MainPageLabel1 = Label(gui, text="Welcome!")
     MainPageLabel2 = Label(gui, text="Click on the button above to browse for a Dataset!")
     # Button to browse for Dataset
-    browseButton = Button(gui, text="Browse", padx=20, pady=8, bg="light blue", command=jkl)
+    browseButton = Button(gui, text="Browse", padx=20, pady=8, bg="light blue", command=chooseFilefromStartPage)
 
     # PACK SECTION
     MainPageLabel1.pack(ipadx=20, ipady=20)
