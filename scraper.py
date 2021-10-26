@@ -1,6 +1,5 @@
 from tkinter import *
 from tkinter import ttk
-import exportFunctions
 from tkinter import filedialog, messagebox
 from tkinter import NW
 import twint
@@ -13,7 +12,6 @@ import tkinter.messagebox
 
 # imported modules used for GUI to function
 
-
 def startFromMenu():
     """This function re-does the gui navigation bar and frames after navigating from the menu page"""
     mainMenuFrame.pack_forget()  # removes any frame used for the main menu page
@@ -23,21 +21,15 @@ def startFromMenu():
     homePageMenu = Button(buttonFrame, text="Main Menu", command=mainMenu, padx=20, pady=10)
     graphButtonMenu = Button(buttonFrame, text="Generate Graph", padx=20, pady=10,
                                     command=graphData)
-    exportButtonMenu = Button(buttonFrame, text="Export Data", padx=30, pady=10, command=sendData)
     exitButtonMenu = Button(buttonFrame, text="QUIT the Application", padx=30, pady=10, command=exitWindow)
 
         # default pack/grid area to place the buttons back
     homePageMenu.grid(row=0, column=0)
     graphButtonMenu.grid(row=0, column=1)
-    exportButtonMenu.grid(row=0, column=2)
     exitButtonMenu.grid(row=0, column=3)
-
-
 
     # default Frames Creation
     
-
-
 def mainMenu():
     """Function runs when users navigate to the main menu"""
     mainframe.pack_forget()  # hides any frames used for the content page/navigation bar
@@ -61,27 +53,16 @@ def mainMenu():
 
     return
 
-
-
 def chooseFile():
     global tempdir
             # stores the file path of the user selected data-set to be used with our other functions
-    tempdir = filedialog.askopenfilename(initialdir="",  title="Select Dataset File", filetypes=((".csv Files", "*.csv"), ("All Files", "*.*")))
+    tempdir = filedialog.askopenfilename(initialdir="",  title="Select Dataset", filetypes=((".csv Files", "*.csv"), ("All Files", "*.*")))
             # sending file path to var so other functions can use the file path
             # parse file path
     if tempdir == '':
         messagebox.showerror("Error", "Choose a file!")
     elif tempdir[-3:].lower() not in ['csv', 'prn', 'xls', 'ods'] and tempdir[-4:].lower() not in ['xlsx', 'xltx', 'xlsm',  'xlsb']:
         messagebox.showerror("Error", "Choose a CSV file!")  # Error messagebox
-
-
-        #  convertToDF(tempdir)
-        #  startFromMenu()
-
-
-
-
-
 
 def hideFrames():
     """This function is used to clear all the contents in the frame after navigating to a new function"""
@@ -138,33 +119,25 @@ def runData(x):
             count += 1
             print("Row Number:" + str(count) + " (English Tweet)")
 
-
-
 def graphData():
     def buttoncommand():
         searchTerm = entry1.get()
         numberOfTweets = entry2.get()
 
-        if not numberOfTweets:
+        if not tempdir:
+            tkinter.messagebox.showerror(title="Error!", message="Please choose a dataset.")
+        elif not numberOfTweets:
             tkinter.messagebox.showerror(title="Empty Field!", message="Please enter number of tweets.")
         elif numberOfTweets and not numberOfTweets.isnumeric():
             tkinter.messagebox.showerror(title="Error!", message="Please enter an integer.")
-        else:
-         
+        else:     
             buttonFrame.pack_forget()
             runData(tempdir)
             
-
-
-
-            print("Refer to DataSet.csv for result")
-                # def displayGraphNameAccordingToDataType2(event):
+            print("Refer to " + tempdir + " for result")
             """This function listens to the 'event' and displays the graph based on the datatype selected using the combobox"""
-                # if combi.get() == "Top 10 words for each emotion":
             os.system('K:/Programs/Python/python.exe emotionanalysis.py')
-                # elif combi.get() == "LDA Topics":
             os.system('K:/Programs/Python/python.exe topicmodelling.py')
-                # elif combi.get() == "Wordcloud of tweets":
             os.system('K:/Programs/Python/python.exe wordcloudgenerator.py')
             label1.destroy()
             entry1.destroy()
@@ -172,7 +145,7 @@ def graphData():
             entry2.destroy()
             label3.destroy()
             button1.destroy()
-            browseButton.destroy()
+            uploadButton.destroy()
 
             def nex_img(i):  # takes the current scale position as an argument
                 # delete previous image
@@ -191,20 +164,17 @@ def graphData():
             scale.pack(side=BOTTOM, fill=X)
             canvas = Canvas(contentFrame, width=1920, height=1080)
             canvas.pack()
-
             # show first image
             nex_img(1)
             return None
 
-
-
     hideFrames()
-    title = Label(contentFrame, text="1002 Project", fg="blue", font="lucida 25 bold")
+    title = Label(contentFrame, text="Covid-19 Data Crawler", fg="blue", font="lucida 25 bold")
     title.pack()
-    label1 = Label(contentFrame, text="Choose a dataset:")
+    label1 = Label(contentFrame, text="Upload a dataset:")
     label1.pack()
-    browseButton = Button(contentFrame, text="Browse", bg="light blue", command=chooseFile)
-    browseButton.pack()
+    uploadButton = Button(contentFrame, text="Upload", command=chooseFile)
+    uploadButton.pack()
     label2 = Label(contentFrame, text='Please enter search term:')
     label2.pack()
     entry1 = Entry(contentFrame, width=20)
@@ -217,18 +187,11 @@ def graphData():
             "Top 10 words for each emotion",
             "LDA Topics",
             "Wordcloud of tweets",
-
         ]
 
     clicked = StringVar()
     clicked.set(dataType[0])
 
-        #combi2 = ttk.Combobox(contentFrame, value=dataType, width=80)  # using tkinter's combobox as the drop down lsit
-        #combi2.current(0)  # displays the default selected option
-        # combi2.bind("<<ComboboxSelected>>", displayGraphNameAccordingToDataType2)  # bind any event to a selection
-        #dropdownListLabel2 = Label(contentFrame, text="Choose the graph to be generated:")
-        #dropdownListLabel2.pack(pady=50)
-        #combi2.pack()
     button1 = Button(contentFrame, text="Search", command=buttoncommand)
     button1.pack()
 
@@ -240,83 +203,9 @@ def graphData():
     mainframe.pack(fill=BOTH, expand=1)
     contentFrame.pack(fill=BOTH, expand=1)
 
-
-
-def sendData():
-    """This function is used to export and send the data through E-mail in the GUI"""
-    hideFrames()  # resets the frame
-
-    treeFrame = LabelFrame(contentFrame, text="Data")  # create a frame to store displayed data
-    treeview1 = ttk.Treeview(treeFrame)  # uses the treeview widget
-    treeview1.place(relheight=1, relwidth=1)
-    treeScrolly = Scrollbar(treeFrame, orient="vertical",
-                                command=treeview1.yview)  # command means update the yaxis view of the widget
-    treeScrollx = Scrollbar(treeFrame, orient="horizontal",
-                                command=treeview1.xview)  # command means update the xaxis view of the widget
-    treeview1.configure(xscrollcommand=treeScrollx.set,
-                            yscrollcommand=treeScrolly.set)  # assign the scrollbars to the Treeview Widget
-
-    mainLabel = Label(contentFrame, text="Sort Table based on: ")
-
-    sortType = [  # dropdown/sorting list options
-            "Ascending", "Descending",]
-
-    def sortData(event):
-        """Sorts the data and sends it to the emailFunctions file"""
-        exportFunctions.clear_data(treeview1)  # Clear any data available
-        if sortedData.get() == "Ascending":
-            exportFunctions.readData(treeview1, column.get(), True)
-        elif sortedData.get() == "Descending":
-            exportFunctions.readData(treeview1, column.get(), False)
-
-    sortedData = ttk.Combobox(contentFrame, value=sortType)  # combobox listens to the option being selected and executes the command
-    sortedData.current(0)  # set default drop down box value
-    sortedData.bind("<<ComboboxSelected>>", sortData)  # bind the combobox with the options
-
-    columnType = [  # radio button selections
-            ("ID", "ID"),
-            ("Gender", "Gender"),
-            ("Age", "Age"),
-            ("Nationality", "Nationality"),]
-
-    column = StringVar()  # string var to store the option that will be selected
-    column.set("ID")  # set default selected value to ID
-    radioButtonFrame = Frame(contentFrame, height=30, width=100)  # generates a frame to store the radio buttons
-
-    i = 0  # counter for column placement
-    for text, mode in columnType:  # for every option there is for columns, generate a radio button
-        i += 1
-        Radiobutton(radioButtonFrame, text=text, variable=column, value=mode).grid(row=0, column=i)  # radio button generated and placed according to their position (i)
-
-
-    def exportOnly():  # export function
-        """Sends the sorted data table settings to the emailFunction file to be exported"""
-        if sortedData.get() == "Ascending":  # sorts according to drop down list option
-            exportFunctions.exportOnly(column.get(), True)
-        elif sortedData.get() == "Descending":
-            exportFunctions.exportOnly(column.get(), False)
-
-    exportButton = Button(contentFrame, text='Export the file ONLY (Following format chosen above)', command=exportOnly)
-
-        # function packing area
-    radioButtonFrame.pack()
-    mainLabel.pack()
-    sortedData.pack()
-    exportButton.pack(pady=5)
-    treeFrame.pack(fill=BOTH, expand=1)
-    treeScrollx.pack(side="bottom", fill="x")  # make the scrollbar fill the x axis of the Treeview widget
-    treeScrolly.pack(side="right", fill="y")  # make the scrollbar fill the y axis of the Treeview widget
-
-        # default packing area
-    buttonFrame.pack()
-    mainframe.pack(fill=BOTH, expand=1)
-    contentFrame.pack(fill=BOTH, expand=1)
-
-
 def exitWindow():
     """This function forces the app to exit/quit"""
     gui.quit()
-
 
 gui = Tk()
 gui.iconbitmap('icons/SIT_logo_2.ico')
@@ -330,51 +219,17 @@ contentFrame = Frame(mainframe, height=600, width=1000, borderwidth=10)
 
     # Main Buttons creation section
 homePage = Button(buttonFrame, text="Main Menu", command=mainMenu, padx=20, pady=10)
-barGraphButton = Button(buttonFrame, text="Generate Graph", padx=20, pady=10, command=graphData)
-exportButton = Button(buttonFrame, text="Export data", padx=30, pady=10, command=sendData)
+barGraphButton = Button(buttonFrame, text="Generate Graphs", padx=20, pady=10, command=graphData)
 exitButton = Button(buttonFrame, text="Quit the Application", padx=30, pady=10, command=exitWindow)
 
 Label(contentFrame, text="Start by navigating to one of our functions!", font=("Consolas", 20), fg='white', bg='orange').pack(padx=10)  # Welcome page
     # packing/grid area to display into the gui
 homePage.grid(row=0, column=0)
 barGraphButton.grid(row=0, column=1)
-exportButton.grid(row=0, column=2)
 exitButton.grid(row=0, column=3)
 buttonFrame.pack()
 mainframe.pack(fill=BOTH, expand=1)
 contentFrame.pack()
 
-
 gui.mainloop()
 # initialise starting GUI Window
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
